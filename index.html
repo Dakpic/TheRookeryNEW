@@ -5,6 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Rookery - Sports & Dining</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Define custom colors using CSS variables (defined below in <style>)
+                        'rookery-gold': 'var(--rookery-gold)',
+                        'rookery-red': 'var(--rookery-red)',
+                        'near-black': 'var(--near-black)',
+                        'near-white': 'var(--near-white)',
+                        'menu-bg-light': 'var(--menu-bg-light)',
+                        'menu-bg-darker': 'var(--menu-bg-darker)',
+                        'history-bg': 'var(--history-bg)',
+                    }
+                }
+            }
+        }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Frank+Ruhl+Libre:wght@400&family=Josefin+Sans:wght@400;600;700&family=Mukta+Vaani:wght@400;600&display=swap" rel="stylesheet">
@@ -121,6 +139,30 @@
             vertical-align: baseline; /* Align with the dollar amount */
             margin-left: 1px; /* Small space */
         }
+         /* Add a utility class to hide elements (used for GF notes initially) */
+        .hidden {
+            display: none;
+        }
+        /* Style for sauce list */
+        .sauce-list {
+            font-size: 0.8em; /* Further reduced font size */
+            color: #555; /* Slightly dimmer text for sauce list */
+            margin-top: 8px; /* Space above the sauce list */
+            padding-left: 10px; /* Indent the list slightly */
+            line-height: 1.4; /* Adjusted line height */
+            white-space: normal; /* Allow wrapping on very small screens if needed */
+        }
+        .sauce-list strong { /* Style for subheadings within sauce list */
+            display: block; /* Force labels ("Sauces:", "Dry Rubs:") onto their own lines */
+            color: #333; /* Darker color for subheadings */
+            font-weight: 600;
+            margin-top: 4px; /* Add a little space above each label */
+            margin-bottom: 2px; /* Add a little space below each label */
+        }
+        .sauce-list span { /* Span to hold the actual list of sauces/rubs */
+             display: block; /* Ensure the list itself starts below the label */
+        }
+
     </style>
 </head>
 <body class="bg-near-black-override text-near-white-override">
@@ -178,19 +220,22 @@
                 <div class="transform hover:scale-105 transition-transform duration-300 ease-in-out">
                     <img src="wp-content/images/eagles-nest-section/placeholder1.jpg"
                          alt="Photo from the Eagle's Nest era 1"
-                         class="w-full h-auto rounded-lg shadow-md object-cover aspect-video">
+                         class="w-full h-auto rounded-lg shadow-md object-cover aspect-video"
+                         onerror="this.onerror=null; this.src='https://placehold.co/600x400/333333/caac62?text=Eagle%27s+Nest+Memory+1';">
                     <p class="text-base text-gray-400 mt-3">A glimpse into the past.</p>
                 </div>
                  <div class="transform hover:scale-105 transition-transform duration-300 ease-in-out">
                     <img src="wp-content/images/eagles-nest-section/placeholder2.jpg"
                          alt="Photo from the Eagle's Nest era 2"
-                         class="w-full h-auto rounded-lg shadow-md object-cover aspect-video">
+                         class="w-full h-auto rounded-lg shadow-md object-cover aspect-video"
+                         onerror="this.onerror=null; this.src='https://placehold.co/600x400/444444/caac62?text=Eagle%27s+Nest+Memory+2';">
                     <p class="text-base text-gray-400 mt-3">Remembering the Eagle's Nest.</p>
                 </div>
                  <div class="transform hover:scale-105 transition-transform duration-300 ease-in-out">
                     <img src="wp-content/images/eagles-nest-section/placeholder3.jpg"
                          alt="Photo from the Eagle's Nest era 3"
-                         class="w-full h-auto rounded-lg shadow-md object-cover aspect-video" style="object-position: 50% 75%;">
+                         class="w-full h-auto rounded-lg shadow-md object-cover aspect-video" style="object-position: 50% 75%;"
+                         onerror="this.onerror=null; this.src='https://placehold.co/600x400/555555/caac62?text=Eagle%27s+Nest+Memory+3';">
                     <p class="text-base text-gray-400 mt-3">Good times at the Nest.</p>
                 </div>
             </div>
@@ -258,6 +303,12 @@
                         <ul class="space-y-4">
                             <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Wings</span><span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span><span class="font-medium text-xl text-near-black-override">12<span class="price-cents">99</span></span></li>
                         </ul>
+                        <div class="sauce-list mt-4">
+                            <strong>Sauces:</strong>
+                            <span>Buffalo | Smoked BBQ | Garlic Parm | Gochujang | Spicy Honey Garlic | Buffa-Q | Parmlo | Honey BBQ | Fuego</span>
+                            <strong>Dry Rubs:</strong>
+                            <span>Dill | Ranch | Gold Dust | Hell Dust | Hell Dust XTRA HOT</span>
+                        </div>
                     </div>
                 </div>
              </div>
@@ -399,7 +450,7 @@
                 <a href="https://www.facebook.com/profile.php?id=61573131166633" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="text-gray-400 hover:text-rookery-gold transition-colors duration-200">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-facebook"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
                 </a>
-                </div>
+            </div>
             <p class="text-sm mb-2">Veteran Owned and Operated</p>
             <p class="text-sm">© <script>document.write(new Date().getFullYear())</script> The Rookery. All Rights Reserved.</p>
              </div>
@@ -407,7 +458,13 @@
 
     <script>
       // Initialize Lucide icons after the DOM is loaded
-      lucide.createIcons();
+      // Ensure Lucide script has loaded before calling this
+      if (typeof lucide !== 'undefined') {
+          lucide.createIcons();
+      } else {
+          console.error('Lucide icons library not found.');
+      }
+
 
       // JavaScript for Collapsible Menu functionality
       document.addEventListener('DOMContentLoaded', function () {
@@ -416,61 +473,53 @@
 
         triggers.forEach(trigger => {
           // Get the content element associated with the trigger
-          const content = document.getElementById(trigger.getAttribute('aria-controls'));
+          const contentId = trigger.getAttribute('aria-controls');
+          const content = document.getElementById(contentId);
+
           // Find the sibling GF note if it exists (used for gluten-free notes)
-          const gfNote = trigger.nextElementSibling && trigger.nextElementSibling.classList.contains('gf-note')
-                       ? trigger.nextElementSibling
-                       : null;
-
-          // Add click event listener to each trigger
-          trigger.addEventListener('click', function() {
-            const icon = this.querySelector('.chevron-icon'); // Get the chevron icon
-            const isOpen = this.getAttribute('aria-expanded') === 'true'; // Check current state
-
-            if (content) {
-              // Toggle the aria-expanded attribute for accessibility
-              this.setAttribute('aria-expanded', !isOpen);
-              // Toggle the 'open' class to control visibility via CSS max-height
-              content.classList.toggle('open');
-              // Toggle the 'open' class on the icon for rotation via CSS transform
-              icon.classList.toggle('open');
-
-              // Special handling for gluten-free notes: show/hide them with the section
-              // Corrected logic: Show when opening, hide when closing.
-              if (gfNote) {
-                  if (!isOpen) { // If section is opening
-                      gfNote.classList.remove('hidden'); // Make sure note is visible
-                  } else { // If section is closing
-                      gfNote.classList.add('hidden'); // Hide the note
-                  }
-              }
-            }
-          });
-
-          // Initially hide GF notes if their section is collapsed
-          if (gfNote && trigger.getAttribute('aria-expanded') === 'false') {
-              gfNote.classList.add('hidden');
+          let potentialGfNote = trigger.nextElementSibling;
+          let gfNote = null;
+          if (potentialGfNote && potentialGfNote.classList.contains('gf-note')) {
+              gfNote = potentialGfNote;
           }
-        });
-      });
-    </script>
-    <script>
-        /* Tailwind Config (Included for reference, but CSS variables and overrides are primary) */
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'rookery-gold': 'var(--rookery-gold)',
-                        'rookery-red': 'var(--rookery-red)',
-                        'near-black': 'var(--near-black)',
-                        'near-white': 'var(--near-white)',
-                        'menu-bg-light': 'var(--menu-bg-light)',
-                        'menu-bg-darker': 'var(--menu-bg-darker)',
-                        'history-bg': 'var(--history-bg)',
+
+
+          // Ensure the content element exists before adding the listener
+          if (content) {
+              // Add click event listener to each trigger
+              trigger.addEventListener('click', function() {
+                const icon = this.querySelector('.chevron-icon'); // Get the chevron icon
+                const isOpen = this.getAttribute('aria-expanded') === 'true'; // Check current state
+
+                // Toggle the aria-expanded attribute for accessibility
+                this.setAttribute('aria-expanded', String(!isOpen));
+                // Toggle the 'open' class to control visibility via CSS max-height
+                content.classList.toggle('open');
+
+                // Toggle the 'open' class on the icon for rotation via CSS transform
+                if (icon) {
+                    icon.classList.toggle('open');
+                }
+
+                // Special handling for gluten-free notes: show/hide them with the section
+                if (gfNote) {
+                    if (!isOpen) { // If section is opening
+                        gfNote.classList.remove('hidden'); // Make sure note is visible
+                    } else { // If section is closing
+                        gfNote.classList.add('hidden'); // Hide the note
                     }
                 }
-            }
-        }
+              });
+
+              // Initially hide GF notes if their section is collapsed
+              if (gfNote && trigger.getAttribute('aria-expanded') === 'false') {
+                  gfNote.classList.add('hidden');
+              }
+          } else {
+              console.warn(`Collapsible content not found for trigger controlling "${contentId}"`);
+          }
+        });
+      }); // End of DOMContentLoaded listener
     </script>
-</body>
+    </body>
 </html>
