@@ -162,6 +162,26 @@
         .sauce-list span { /* Span to hold the actual list of sauces/rubs */
              display: block; /* Ensure the list itself starts below the label */
         }
+        /* Style for direction links - now buttons */
+        .direction-link {
+             display: block; /* Stack links vertically */
+             margin-top: 0.75rem; /* Add space above each button */
+             padding: 0.6rem 1.2rem; /* Button padding (vertical, horizontal) */
+             background-color: var(--rookery-gold); /* Gold background */
+             color: var(--near-black); /* Dark text for contrast */
+             font-weight: 600; /* Make text bolder */
+             text-align: center; /* Center text within button */
+             text-decoration: none; /* Remove underline */
+             border-radius: 8px; /* Rounded corners */
+             transition: background-color 0.2s ease-in-out; /* Smooth hover transition */
+             width: 280px; /* Set fixed width to ensure buttons are same size */
+             box-sizing: border-box; /* Include padding in width calculation */
+        }
+        .direction-link:hover {
+             background-color: #b89b55; /* Slightly darker gold on hover */
+             color: var(--near-black); /* Keep text dark on hover */
+        }
+
 
     </style>
 </head>
@@ -419,7 +439,14 @@
                          <h4 class="text-3xl font-semibold mb-4 text-near-white-override header-font">Location</h4>
                          <p>1914 Campbell Rd</p>
                         <p>La Crosse, WI 54601</p>
-                        <a href="https://www.google.com/maps/search/?api=1&query=1914+Campbell+Rd+La+Crosse+WI+54601" target="_blank" class="text-rookery-gold hover:text-yellow-300 underline mt-3 inline-block">Get Directions</a>
+                        <div>
+                            <a href="http://maps.apple.com/?address=1914,Campbell+Rd,La+Crosse,WI,54601" target="_blank" rel="noopener noreferrer" class="direction-link">
+                                Directions | Apple Maps
+                            </a>
+                            <a href="https://www.google.com/maps/search/?api=1&query=1914+Campbell+Rd,+La+Crosse,+WI+54601" target="_blank" rel="noopener noreferrer" class="direction-link">
+                                Directions | Google Maps
+                            </a>
+                         </div>
                     </div>
                     <div>
                          <h4 class="text-3xl font-semibold mb-4 text-near-white-override header-font">Hours</h4>
