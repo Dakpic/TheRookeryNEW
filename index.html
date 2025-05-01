@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Rookery - Sports & Dining</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Frank+Ruhl+Libre:wght@400&family=Josefin+Sans:wght@400;600;700&family=Mukta+Vaani:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Define Custom Color Variables for consistent theming */
+        :root {
+            --near-black: #121212;
+            --near-white: #f5f5f5;
+            --rookery-gold: #caac62;
+            --rookery-red: #8B0000; /* Dark red for accents */
+            --menu-bg-light: #f5f5f5; /* Light background for food menu */
+            --menu-bg-darker: #e5e5e5; /* Slightly darker background for drinks menu */
+            --history-bg: #f5f5f5; /* Background for history section */
+            --section-divider: #333333; /* Dark divider color */
+        }
+
+        /* Apply Mukta Vaani font globally for body text */
+        body {
+            font-family: 'Mukta Vaani', sans-serif;
+            font-size: 18px; /* Base font size */
+            line-height: 1.7; /* Improve readability */
+            background-color: var(--near-black); /* Apply dark background globally */
+            color: var(--near-white); /* Apply light default text color */
+        }
+        /* Apply Bodoni Moda font to the main logo/header */
+        h1.header-font {
+            font-family: 'Bodoni Moda', serif;
+        }
+        /* Apply Josefin Sans font to other headings */
+        h2.header-font, h3, h4 {
+            font-family: 'Josefin Sans', sans-serif;
+            font-weight: 600; /* Make headings slightly bolder */
+        }
+        /* Apply Frank Ruhl Libre font to subheadings */
+        .subheading-font {
+             font-family: 'Frank Ruhl Libre', serif;
+        }
+
+        /* Enable simple smooth scrolling for anchor links */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Direct CSS Overrides using !important to ensure styles apply over Tailwind defaults */
+        /* These are used because the base theme is dark, but some sections need light backgrounds */
+        .bg-near-black-override { background-color: var(--near-black) !important; }
+        .text-near-white-override { color: var(--near-white) !important; }
+        .bg-near-white-override { background-color: var(--near-white) !important; }
+        .text-near-black-override { color: var(--near-black) !important; }
+        .bg-menu-bg-light-override { background-color: var(--menu-bg-light) !important; }
+        .bg-menu-bg-darker-override { background-color: var(--menu-bg-darker) !important; }
+        .text-rookery-gold-override { color: var(--rookery-gold) !important; }
+        .text-rookery-red-override { color: var(--rookery-red) !important; }
+        .border-rookery-red-override { border-color: var(--rookery-red) !important; }
+        .border-section-divider { border-color: var(--section-divider) !important; }
+
+        /* Ensure map iframe maintains aspect ratio and is responsive */
+        .map-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .map-container {
+            position: relative;
+            overflow: hidden;
+            padding-top: 75%; /* Aspect ratio 4:3 (height/width) */
+            height: 100%; /* Ensure container takes up space */
+        }
+
+        /* Style for menu item hover effect */
+        .menu-item:hover {
+            background-color: rgba(202, 172, 98, 0.1); /* Subtle light gold tint on hover */
+        }
+
+        /* Custom style for navigation icon hover effect */
+        .nav-icon {
+            transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+        }
+        .nav-icon:hover {
+            background-color: var(--rookery-gold) !important; /* Gold background on hover */
+            color: var(--near-black) !important; /* Change icon color to black on hover */
+        }
+
+        /* Styles for collapsible menu sections */
+        .collapsible-trigger {
+            cursor: pointer;
+            display: flex; /* Use flex to align title and chevron icon */
+            justify-content: space-between; /* Push icon to the right */
+            align-items: center; /* Vertically align items */
+            width: 100%; /* Ensure trigger takes full width */
+        }
+        .collapsible-content {
+            overflow: hidden; /* Hide content when collapsed */
+            transition: max-height 0.3s ease-out; /* Smooth expand/collapse animation */
+            max-height: 0; /* Collapsed by default */
+        }
+        .collapsible-content.open {
+            max-height: 1000px; /* Set a large max-height to accommodate content when open */
+        }
+        .chevron-icon {
+            transition: transform 0.3s ease-out; /* Smooth rotation animation */
+        }
+        .chevron-icon.open {
+            transform: rotate(180deg); /* Rotate icon when open */
+        }
+
+        /* Style for smaller cents in prices */
+        .price-cents {
+            font-size: 0.6em; /* Make cents smaller */
+            vertical-align: baseline; /* Align with the dollar amount */
+            margin-left: 1px; /* Small space */
+        }
+    </style>
+</head>
+<body class="bg-near-black-override text-near-white-override">
+
+    <header class="bg-near-black-override text-near-white-override shadow-md sticky top-0 z-10 border-b border-section-divider">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-near-white-override header-font uppercase">
+                <a href="#" class="hover:text-rookery-gold transition-colors duration-200">The Rookery</a>
+            </h1>
+            <div class="flex space-x-4 items-center">
+                 <a href="#menu" aria-label="Food Menu" class="nav-icon text-gray-300 p-2 rounded-full transition duration-150 ease-in-out">
+                    <i data-lucide="utensils-crossed" class="w-6 h-6"></i>
+                </a>
+                <a href="#drinks" aria-label="Drinks Menu" class="nav-icon text-gray-300 p-2 rounded-full transition duration-150 ease-in-out">
+                    <i data-lucide="glass-water" class="w-6 h-6"></i>
+                </a>
+                <a href="#location-hours" aria-label="Location and Hours" class="nav-icon text-gray-300 p-2 rounded-full transition duration-150 ease-in-out">
+                    <i data-lucide="map-pin" class="w-6 h-6"></i>
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <section id="hero" class="relative h-[80vh] min-h-[400px] flex items-end justify-start text-near-white-override px-6 pb-16 md:px-12 md:pb-20">
+        <img
+            src="wp-content/images/rookery-hero.jpg"
+            alt="Interior view of The Rookery bar"
+            class="absolute inset-0 w-full h-full object-cover -z-10"
+            onerror="this.onerror=null; this.src='https://placehold.co/1200x600/121212/caac62?text=The+Rookery';"
+        >
+        <div class="absolute inset-0 bg-near-black opacity-60"></div>
+        <div class="relative z-5 text-left px-4 max-w-4xl">
+             <h2 class="text-5xl md:text-6xl lg:text-7xl mb-4 text-near-white-override uppercase header-font tracking-wide">La Crosse, Meet The Rookery.</h2>
+             <p class="text-xl md:text-2xl text-near-white-override subheading-font">La Crosse's new standard for food, drinks, and game day fun.</p>
+        </div>
+    </section>
+
+    <section id="about" class="py-20 bg-near-black-override">
+        <div class="container mx-auto px-6 text-center max-w-4xl">
+             <h3 class="text-4xl font-bold text-center mb-8 text-near-white-override header-font">Entertainment & Ambiance</h3>
+             <p class="text-xl text-gray-200 mb-8 leading-relaxed">
+                Beyond our exceptional menu, The Rookery offers a refined yet relaxed atmosphere perfect for unwinding. Enjoy a friendly game of <span class="font-semibold text-near-white-override">Pool</span> or test your aim with <span class="font-semibold text-near-white-override">Darts</span> in our dedicated gaming area.
+            </p>
+            <p class="text-xl text-gray-200">Experience the perfect blend of dining and leisure.</p>
+        </div>
+    </section>
+
+    <section id="history" class="py-20 bg-near-black-override text-near-white-override">
+        <div class="container mx-auto px-6 text-center max-w-5xl">
+             <h3 class="text-4xl font-bold text-center mb-8 text-near-white-override header-font">A Nod to the Past</h3>
+             <p class="text-xl text-gray-300 mb-10 leading-relaxed">
+                We're proud to build upon the history of this location, formerly known as the beloved <span class="font-semibold text-near-white-override">Eagle's Nest</span>.
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+                <div class="transform hover:scale-105 transition-transform duration-300 ease-in-out">
+                    <img src="wp-content/images/eagles-nest-section/placeholder1.jpg"
+                         alt="Photo from the Eagle's Nest era 1"
+                         class="w-full h-auto rounded-lg shadow-md object-cover aspect-video">
+                    <p class="text-base text-gray-400 mt-3">A glimpse into the past.</p>
+                </div>
+                 <div class="transform hover:scale-105 transition-transform duration-300 ease-in-out">
+                    <img src="wp-content/images/eagles-nest-section/placeholder2.jpg"
+                         alt="Photo from the Eagle's Nest era 2"
+                         class="w-full h-auto rounded-lg shadow-md object-cover aspect-video">
+                    <p class="text-base text-gray-400 mt-3">Remembering the Eagle's Nest.</p>
+                </div>
+                 <div class="transform hover:scale-105 transition-transform duration-300 ease-in-out">
+                    <img src="wp-content/images/eagles-nest-section/placeholder3.jpg"
+                         alt="Photo from the Eagle's Nest era 3"
+                         class="w-full h-auto rounded-lg shadow-md object-cover aspect-video" style="object-position: 50% 75%;">
+                    <p class="text-base text-gray-400 mt-3">Good times at the Nest.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="menu" class="py-20 bg-menu-bg-light-override text-near-black-override">
+        <div class="container mx-auto px-6 max-w-3xl">
+             <h3 class="text-5xl font-bold text-center mb-8 text-near-black-override header-font">Food Menu</h3>
+             <p class="text-center text-lg text-gray-700 mb-16"> FRIES | TOTS | ONION RINGS 5 | GREEN BEANS 5 | CURDS 7 </p>
+             <div class="space-y-8">
+                <div>
+                    <button class="collapsible-trigger text-left w-full" aria-expanded="false" aria-controls="appetizers-list">
+                        <h4 class="text-3xl font-semibold text-near-black-override border-b-2 border-rookery-red-override pb-2 inline-block header-font">Appetizers</h4>
+                        <i data-lucide="chevron-down" class="chevron-icon w-6 h-6 text-gray-600"></i>
+                    </button>
+                    <div id="appetizers-list" class="collapsible-content mt-4">
+                        <ul class="space-y-4">
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Cheese Curds</span><span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span><span class="font-medium text-xl text-near-black-override">9<span class="price-cents">99</span></span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Crispy Green Beans</span><span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span><span class="font-medium text-xl text-near-black-override">8<span class="price-cents">99</span></span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Beer Battered O- Rings</span><span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span><span class="font-medium text-xl text-near-black-override">9<span class="price-cents">99</span></span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Fry Basket</span><span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span><span class="font-medium text-xl text-near-black-override">6<span class="price-cents">99</span></span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Chicken Strips</span><span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span><span class="font-medium text-xl text-near-black-override">9<span class="price-cents">99</span></span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <button class="collapsible-trigger text-left w-full" aria-expanded="false" aria-controls="burgers-list">
+                        <h4 class="text-3xl font-semibold text-near-black-override border-b-2 border-rookery-red-override pb-2 inline-block header-font">Burgers</h4>
+                        <i data-lucide="chevron-down" class="chevron-icon w-6 h-6 text-gray-600"></i>
+                    </button>
+                    <div id="burgers-list" class="collapsible-content mt-4">
+                        <p class="gf-note text-sm text-gray-500 mb-4 italic">gluten-free bun add 3</p>
+                        <ul class="space-y-4">
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Scooter</span><span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span><span class="font-medium text-xl text-near-black-override">13<span class="price-cents">99</span></span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Downtowner</span><span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span><span class="font-medium text-xl text-near-black-override">13<span class="price-cents">99</span></span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Rook</span><span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span><span class="font-medium text-xl text-near-black-override">13<span class="price-cents">99</span></span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Hamburger</span><span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span><span class="font-medium text-xl text-near-black-override">11<span class="price-cents">99</span></span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Cheeseburger</span><span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span><span class="font-medium text-xl text-near-black-override">11<span class="price-cents">99</span></span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <button class="collapsible-trigger text-left w-full" aria-expanded="false" aria-controls="sandwiches-list">
+                        <h4 class="text-3xl font-semibold text-near-black-override border-b-2 border-rookery-red-override pb-2 inline-block header-font">Sandwiches</h4>
+                        <i data-lucide="chevron-down" class="chevron-icon w-6 h-6 text-gray-600"></i>
+                    </button>
+                    <div id="sandwiches-list" class="collapsible-content mt-4">
+                        <p class="gf-note text-sm text-gray-500 mb-4 italic">gluten-free bun/wrap add 3</p>
+                        <ul class="space-y-4">
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Birria Bluff Melt</span><span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span><span class="font-medium text-xl text-near-black-override">14<span class="price-cents">99</span></span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Eagle</span><span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span><span class="font-medium text-xl text-near-black-override">14<span class="price-cents">99</span></span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Siren</span><span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span><span class="font-medium text-xl text-near-black-override">14<span class="price-cents">99</span></span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Phoenix</span><span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span><span class="font-medium text-xl text-near-black-override">14<span class="price-cents">99</span></span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Classic Chicken Sandwich</span><span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span><span class="font-medium text-xl text-near-black-override">13<span class="price-cents">99</span></span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <button class="collapsible-trigger text-left w-full" aria-expanded="false" aria-controls="wings-list">
+                        <h4 class="text-3xl font-semibold text-near-black-override border-b-2 border-rookery-red-override pb-2 inline-block header-font">Wings</h4>
+                        <i data-lucide="chevron-down" class="chevron-icon w-6 h-6 text-gray-600"></i>
+                    </button>
+                    <div id="wings-list" class="collapsible-content mt-4">
+                        <ul class="space-y-4">
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Wings</span><span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span><span class="font-medium text-xl text-near-black-override">12<span class="price-cents">99</span></span></li>
+                        </ul>
+                    </div>
+                </div>
+             </div>
+        </div>
+    </section>
+
+    <section id="drinks" class="py-20 bg-menu-bg-darker-override text-near-black-override">
+        <div class="container mx-auto px-6 max-w-3xl">
+             <h3 class="text-5xl font-bold text-center mb-16 text-near-black-override header-font">Drinks Menu</h3>
+             <div class="space-y-8">
+                <div>
+                    <button class="collapsible-trigger text-left w-full" aria-expanded="false" aria-controls="draft-beer-list">
+                        <h4 class="text-3xl font-semibold text-near-black-override border-b-2 border-rookery-red-override pb-2 inline-block header-font">Draft Beer</h4>
+                        <i data-lucide="chevron-down" class="chevron-icon w-6 h-6 text-gray-600"></i>
+                    </button>
+                    <div id="draft-beer-list" class="collapsible-content mt-4">
+                        <ul class="space-y-4">
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Miller</span><span class="font-medium text-xl text-near-black-override">4</span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Coors</span><span class="font-medium text-xl text-near-black-override">4</span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Spotted Cow</span><span class="font-medium text-xl text-near-black-override">5</span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Blue Moon</span><span class="font-medium text-xl text-near-black-override">5</span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Leinies</span><span class="font-medium text-xl text-near-black-override">5</span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Angry Orchard</span><span class="font-medium text-xl text-near-black-override">5</span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Sam Adams Seasonal</span><span class="font-medium text-xl text-near-black-override">5</span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Two Hearted</span><span class="font-medium text-xl text-near-black-override">8</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <button class="collapsible-trigger text-left w-full" aria-expanded="false" aria-controls="bottled-beer-list">
+                        <h4 class="text-3xl font-semibold text-near-black-override border-b-2 border-rookery-red-override pb-2 inline-block header-font">Bottled Beer</h4>
+                        <i data-lucide="chevron-down" class="chevron-icon w-6 h-6 text-gray-600"></i>
+                    </button>
+                    <div id="bottled-beer-list" class="collapsible-content mt-4">
+                        <ul class="space-y-4">
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Miller</span><span class="font-medium text-xl text-near-black-override">4</span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Coors</span><span class="font-medium text-xl text-near-black-override">4</span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">High Life</span><span class="font-medium text-xl text-near-black-override">4</span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Corona</span><span class="font-medium text-xl text-near-black-override">5</span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Coors Banquet</span><span class="font-medium text-xl text-near-black-override">4.50</span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Bud Light</span><span class="font-medium text-xl text-near-black-override">4</span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Budweiser</span><span class="font-medium text-xl text-near-black-override">4</span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Mich Ultra</span><span class="font-medium text-xl text-near-black-override">5</span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Mich Golden</span><span class="font-medium text-xl text-near-black-override">4</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <button class="collapsible-trigger text-left w-full" aria-expanded="false" aria-controls="cans-list">
+                        <h4 class="text-3xl font-semibold text-near-black-override border-b-2 border-rookery-red-override pb-2 inline-block header-font">Cans & Seltzers</h4>
+                        <i data-lucide="chevron-down" class="chevron-icon w-6 h-6 text-gray-600"></i>
+                    </button>
+                    <div id="cans-list" class="collapsible-content mt-4">
+                        <ul class="space-y-4">
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Busch Light</span><span class="font-medium text-xl text-near-black-override">3</span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">PBR</span><span class="font-medium text-xl text-near-black-override">3</span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Hamms</span><span class="font-medium text-xl text-near-black-override">3</span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">White Claw BC</span><span class="font-medium text-xl text-near-black-override">5</span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">White Claw Lime</span><span class="font-medium text-xl text-near-black-override">5</span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Happy Thursday</span><span class="font-medium text-xl text-near-black-override">6</span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Twisted Tea</span><span class="font-medium text-xl text-near-black-override">5</span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Carbliss Lemon Lime</span><span class="font-medium text-xl text-near-black-override">7</span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Carbliss Black Ras</span><span class="font-medium text-xl text-near-black-override">7</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <button class="collapsible-trigger text-left w-full" aria-expanded="false" aria-controls="wine-list">
+                        <h4 class="text-3xl font-semibold text-near-black-override border-b-2 border-rookery-red-override pb-2 inline-block header-font">Wine</h4>
+                        <i data-lucide="chevron-down" class="chevron-icon w-6 h-6 text-gray-600"></i>
+                    </button>
+                    <div id="wine-list" class="collapsible-content mt-4">
+                        <ul class="space-y-4">
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">House Red (Glass/Bottle)</span><span class="font-medium text-xl text-near-black-override">9 / 32</span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">House White (Glass/Bottle)</span><span class="font-medium text-xl text-near-black-override">9 / 32</span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Sparkling Wine</span><span class="font-medium text-xl text-near-black-override">10</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <button class="collapsible-trigger text-left w-full" aria-expanded="false" aria-controls="cocktails-list">
+                        <h4 class="text-3xl font-semibold text-near-black-override border-b-2 border-rookery-red-override pb-2 inline-block header-font">House Cocktails</h4>
+                        <i data-lucide="chevron-down" class="chevron-icon w-6 h-6 text-gray-600"></i>
+                    </button>
+                    <div id="cocktails-list" class="collapsible-content mt-4">
+                        <ul class="space-y-4">
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Moscow Mule</span><span class="font-medium text-xl text-near-black-override">7</span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Bloody Mary</span><span class="font-medium text-xl text-near-black-override">8</span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">White Russian</span><span class="font-medium text-xl text-near-black-override">6</span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Old Fashioned</span><span class="font-medium text-xl text-near-black-override">8</span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Margarita</span><span class="font-medium text-xl text-near-black-override">9</span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Mimosa</span><span class="font-medium text-xl text-near-black-override">6</span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Long Island</span><span class="font-medium text-xl text-near-black-override">12</span></li>
+                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">AMF</span><span class="font-medium text-xl text-near-black-override">12</span></li>
+                        </ul>
+                    </div>
+                </div>
+             </div>
+        </div>
+    </section>
+
+    <section id="location-hours" class="pt-20 pb-24 bg-near-black-override text-near-white-override">
+        <div class="container mx-auto px-6">
+             <h3 class="text-5xl font-bold mb-16 text-near-white-override header-font">Visit Us</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                <div class="text-xl leading-relaxed">
+                    <div class="mb-10">
+                         <h4 class="text-3xl font-semibold mb-4 text-near-white-override header-font">Location</h4>
+                         <p>1914 Campbell Rd</p>
+                        <p>La Crosse, WI 54601</p>
+                        <a href="https://www.google.com/maps/search/?api=1&query=1914+Campbell+Rd+La+Crosse+WI+54601" target="_blank" class="text-rookery-gold hover:text-yellow-300 underline mt-3 inline-block">Get Directions</a>
+                    </div>
+                    <div>
+                         <h4 class="text-3xl font-semibold mb-4 text-near-white-override header-font">Hours</h4>
+                         <ul class="space-y-2">
+                            <li><span class="font-semibold w-24 inline-block">Mon-Thu:</span> 11:00 AM - 11:00 PM</li>
+                            <li><span class="font-semibold w-24 inline-block">Fri-Sat:</span> 11:00 AM - 1:00 AM</li>
+                            <li><span class="font-semibold w-24 inline-block">Sun:</span> 12:00 PM - 10:00 PM</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="map-container rounded-lg overflow-hidden shadow-lg h-full min-h-[350px] md:min-h-full">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2864.696901857589!2d-91.2168986844878!3d43.82579497911587!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x87f95410b974064b%3A0x6f8f9861a8f7b47c!2s1914%20Campbell%20Rd%2C%20La%20Crosse%2C%20WI%2054601!5e0!3m2!1sen!2sus!4v1678886456789!5m2!1sen!2sus"
+                        style="border:0;"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        title="Google Map location of The Rookery">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-8 bg-near-black-override text-gray-500 text-center border-t border-gray-700">
+        <div class="container mx-auto px-6">
+             <div class="flex justify-center space-x-6 mb-6">
+                <a href="https://www.facebook.com/profile.php?id=61573131166633" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="text-gray-400 hover:text-rookery-gold transition-colors duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-facebook"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                </a>
+                </div>
+            <p class="text-sm mb-2">Veteran Owned and Operated</p>
+            <p class="text-sm">© <script>document.write(new Date().getFullYear())</script> The Rookery. All Rights Reserved.</p>
+             </div>
+    </footer>
+
+    <script>
+      // Initialize Lucide icons after the DOM is loaded
+      lucide.createIcons();
+
+      // JavaScript for Collapsible Menu functionality
+      document.addEventListener('DOMContentLoaded', function () {
+        // Get all elements that trigger a collapse/expand
+        const triggers = document.querySelectorAll('.collapsible-trigger');
+
+        triggers.forEach(trigger => {
+          // Get the content element associated with the trigger
+          const content = document.getElementById(trigger.getAttribute('aria-controls'));
+          // Find the sibling GF note if it exists (used for gluten-free notes)
+          const gfNote = trigger.nextElementSibling && trigger.nextElementSibling.classList.contains('gf-note')
+                       ? trigger.nextElementSibling
+                       : null;
+
+          // Add click event listener to each trigger
+          trigger.addEventListener('click', function() {
+            const icon = this.querySelector('.chevron-icon'); // Get the chevron icon
+            const isOpen = this.getAttribute('aria-expanded') === 'true'; // Check current state
+
+            if (content) {
+              // Toggle the aria-expanded attribute for accessibility
+              this.setAttribute('aria-expanded', !isOpen);
+              // Toggle the 'open' class to control visibility via CSS max-height
+              content.classList.toggle('open');
+              // Toggle the 'open' class on the icon for rotation via CSS transform
+              icon.classList.toggle('open');
+
+              // Special handling for gluten-free notes: show/hide them with the section
+              // Corrected logic: Show when opening, hide when closing.
+              if (gfNote) {
+                  if (!isOpen) { // If section is opening
+                      gfNote.classList.remove('hidden'); // Make sure note is visible
+                  } else { // If section is closing
+                      gfNote.classList.add('hidden'); // Hide the note
+                  }
+              }
+            }
+          });
+
+          // Initially hide GF notes if their section is collapsed
+          if (gfNote && trigger.getAttribute('aria-expanded') === 'false') {
+              gfNote.classList.add('hidden');
+          }
+        });
+      });
+    </script>
+    <script>
+        /* Tailwind Config (Included for reference, but CSS variables and overrides are primary) */
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'rookery-gold': 'var(--rookery-gold)',
+                        'rookery-red': 'var(--rookery-red)',
+                        'near-black': 'var(--near-black)',
+                        'near-white': 'var(--near-white)',
+                        'menu-bg-light': 'var(--menu-bg-light)',
+                        'menu-bg-darker': 'var(--menu-bg-darker)',
+                        'history-bg': 'var(--history-bg)',
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
