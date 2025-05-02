@@ -100,6 +100,23 @@
         .menu-item:hover {
             background-color: rgba(202, 172, 98, 0.1); /* Subtle light gold tint on hover */
         }
+        /* Style for menu item description */
+        .menu-item-description {
+            font-size: 0.85em; /* Smaller font size for description */
+            color: #666; /* Lighter text color */
+            line-height: 1.4; /* Adjust line height */
+            padding-left: 1rem; /* Indent description slightly */
+            margin-top: 0.25rem; /* Small space below item name */
+            display: block; /* Ensure it takes its own line */
+        }
+        /* Style for general menu notes */
+        .menu-note {
+            font-size: 0.9em;
+            color: #555;
+            margin-bottom: 0.75rem; /* Add space below the note */
+            font-style: italic;
+        }
+
 
         /* Custom style for navigation icon hover effect */
         .nav-icon {
@@ -124,7 +141,7 @@
             max-height: 0; /* Collapsed by default */
         }
         .collapsible-content.open {
-            max-height: 1000px; /* Set a large max-height to accommodate content when open */
+            max-height: 1500px; /* Increased max-height to accommodate descriptions */
         }
         .chevron-icon {
             transition: transform 0.3s ease-out; /* Smooth rotation animation */
@@ -182,6 +199,120 @@
              color: var(--near-black); /* Keep text dark on hover */
         }
 
+        /* Updated Slideshow Styles */
+        .slideshow-container-wrapper { /* New wrapper for slideshow + slider */
+             position: relative;
+             margin-bottom: 2rem; /* Space below the slider */
+        }
+        .slideshow-container {
+            position: relative;
+            height: 450px; /* Increased height slightly */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px; /* Add perspective for 3D effect */
+            overflow: visible; /* Allow side images to peek out slightly */
+            margin: 0 auto; /* Center the container */
+            max-width: 90%; /* Limit max width */
+        }
+
+        .slideshow-image {
+            position: absolute;
+            width: 60%; /* Base width */
+            max-width: 450px; /* Max width for main image */
+            aspect-ratio: 4 / 3; /* Maintain aspect ratio */
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            object-fit: cover;
+            /* Smooth transitions for transform, opacity, filter, z-index */
+            transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                        opacity 0.6s ease-in-out,
+                        filter 0.6s ease-in-out,
+                        z-index 0s linear 0.4s; /* Delay z-index change */
+            will-change: transform, opacity, filter;
+            /* Removed cursor: pointer; as side images are no longer clickable */
+            border: 2px solid rgba(255, 255, 255, 0.1); /* Subtle border */
+        }
+
+        /* --- Positional Classes --- */
+        /* Center (Main) Image */
+        .slideshow-pos-main {
+            transform: translateX(0) translateZ(0) scale(1); /* Center, full size, front */
+            opacity: 1;
+            filter: blur(0px);
+            z-index: 10;
+        }
+
+        /* Previous (Left) Image */
+        .slideshow-pos-prev {
+            transform: translateX(-55%) translateZ(-150px) scale(0.7); /* Move left, back, scale down */
+            opacity: 0.4;
+            filter: blur(4px);
+            z-index: 5;
+             /* Removed cursor: pointer; */
+        }
+
+        /* Next (Right) Image */
+        .slideshow-pos-next {
+            transform: translateX(55%) translateZ(-150px) scale(0.7); /* Move right, back, scale down */
+            opacity: 0.4;
+            filter: blur(4px);
+            z-index: 5;
+             /* Removed cursor: pointer; */
+        }
+
+        /* Position for image moving out to the far left (hidden) */
+        .slideshow-pos-out-left {
+            transform: translateX(-110%) translateZ(-300px) scale(0.5);
+            opacity: 0;
+            filter: blur(8px);
+            z-index: 1;
+            pointer-events: none; /* Prevent interaction with hidden images */
+        }
+        /* Position for image moving out to the far right (hidden) - Optional, if needed */
+         .slideshow-pos-out-right {
+            transform: translateX(110%) translateZ(-300px) scale(0.5);
+            opacity: 0;
+            filter: blur(8px);
+            z-index: 1;
+             pointer-events: none; /* Prevent interaction with hidden images */
+        }
+
+        /* Slider Styles */
+        .slideshow-slider {
+            width: 70%; /* Adjust width as needed */
+            max-width: 500px; /* Max width */
+            margin: 1.5rem auto 0; /* Center below slideshow */
+            cursor: pointer;
+            height: 10px; /* Slightly thicker track */
+            appearance: none; /* Remove default browser styles */
+            background: rgba(128, 128, 128, 0.5); /* Semi-transparent grey track */
+            border-radius: 5px; /* Rounded track */
+            outline: none;
+        }
+
+        /* Slider Thumb (Chrome, Edge, Safari) */
+        .slideshow-slider::-webkit-slider-thumb {
+            appearance: none; /* Remove default browser styles */
+            width: 60px;  /* Wider thumb */
+            height: 16px; /* Taller thumb */
+            background: var(--rookery-gold); /* Gold thumb */
+            border-radius: 4px; /* Slightly rounded rectangle */
+            cursor: pointer;
+            border: 1px solid var(--near-black); /* Optional border */
+            margin-top: -3px; /* Adjust vertical alignment if needed */
+        }
+
+        /* Slider Thumb (Firefox) */
+        .slideshow-slider::-moz-range-thumb {
+            width: 60px; /* Wider thumb */
+            height: 16px; /* Taller thumb */
+            background: var(--rookery-gold);
+            border-radius: 4px; /* Slightly rounded rectangle */
+            cursor: pointer;
+            border: 1px solid var(--near-black);
+        }
+
 
     </style>
 </head>
@@ -230,6 +361,16 @@
         </div>
     </section>
 
+    <section id="slideshow-gallery" class="py-20 bg-near-black-override overflow-hidden">
+        <div class="container mx-auto px-6 text-center">
+            <div class="slideshow-container-wrapper">
+                <div id="slideshow-container" class="slideshow-container">
+                    </div>
+                <input type="range" id="slideshow-slider" class="slideshow-slider" value="0" min="0" max="4" step="1" aria-label="Image Slideshow Control">
+            </div>
+        </div>
+    </section>
+
     <section id="history" class="py-20 bg-near-black-override text-near-white-override">
         <div class="container mx-auto px-6 text-center max-w-5xl">
              <h3 class="text-4xl font-bold text-center mb-8 text-near-white-override header-font">A Nod to the Past</h3>
@@ -265,7 +406,6 @@
     <section id="menu" class="py-20 bg-menu-bg-light-override text-near-black-override">
         <div class="container mx-auto px-6 max-w-3xl">
              <h3 class="text-5xl font-bold text-center mb-8 text-near-black-override header-font">Food Menu</h3>
-             <p class="text-center text-lg text-gray-700 mb-16"> FRIES | TOTS | ONION RINGS 5 | GREEN BEANS 5 | CURDS 7 </p>
              <div class="space-y-8">
                 <div>
                     <button class="collapsible-trigger text-left w-full" aria-expanded="false" aria-controls="appetizers-list">
@@ -273,12 +413,48 @@
                         <i data-lucide="chevron-down" class="chevron-icon w-6 h-6 text-gray-600"></i>
                     </button>
                     <div id="appetizers-list" class="collapsible-content mt-4">
+                        <p class="menu-note">Try any of our appetizers dusted in our Ranch, Dill, Gold Dust, Hell Dust, Hell Dust X or Rookery seasonings!</p>
                         <ul class="space-y-4">
-                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Cheese Curds</span><span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span><span class="font-medium text-xl text-near-black-override">9<span class="price-cents">99</span></span></li>
-                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Crispy Green Beans</span><span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span><span class="font-medium text-xl text-near-black-override">8<span class="price-cents">99</span></span></li>
-                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Beer Battered O- Rings</span><span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span><span class="font-medium text-xl text-near-black-override">9<span class="price-cents">99</span></span></li>
-                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Fry Basket</span><span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span><span class="font-medium text-xl text-near-black-override">6<span class="price-cents">99</span></span></li>
-                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Chicken Strips</span><span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span><span class="font-medium text-xl text-near-black-override">9<span class="price-cents">99</span></span></li>
+                            <li class="menu-item py-2">
+                                <div class="flex justify-between items-baseline">
+                                    <span class="text-xl font-semibold">WISCONSIN CURDS</span>
+                                    <span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span>
+                                    <span class="font-medium text-xl text-near-black-override">9</span>
+                                </div>
+                                <span class="menu-item-description">Real Wisconsin cheese curds served regular or dusted in one of our house dry rubs</span>
+                            </li>
+                            <li class="menu-item py-2">
+                                <div class="flex justify-between items-baseline">
+                                    <span class="text-xl font-semibold">CRISPY GREEN BEANS</span>
+                                    <span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span>
+                                    <span class="font-medium text-xl text-near-black-override">9</span>
+                                </div>
+                                <span class="menu-item-description">Tender whole green beans fried in a light crispy batter</span>
+                            </li>
+                            <li class="menu-item py-2">
+                                <div class="flex justify-between items-baseline">
+                                    <span class="text-xl font-semibold">BEER BATTERED O-RINGS</span>
+                                    <span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span>
+                                    <span class="font-medium text-xl text-near-black-override">10</span>
+                                </div>
+                                <span class="menu-item-description">Traditional thick cut beer battered onion rings</span>
+                            </li>
+                            <li class="menu-item py-2">
+                                <div class="flex justify-between items-baseline">
+                                    <span class="text-xl font-semibold">STATE STREET FRY BASKET</span>
+                                    <span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span>
+                                    <span class="font-medium text-xl text-near-black-override">7</span>
+                                </div>
+                                <span class="menu-item-description">Large fry basket seasoned with gold dust</span>
+                            </li>
+                            <li class="menu-item py-2">
+                                <div class="flex justify-between items-baseline">
+                                    <span class="text-xl font-semibold">BREADED CHICKEN STRIPS</span>
+                                    <span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span>
+                                    <span class="font-medium text-xl text-near-black-override">10</span>
+                                </div>
+                                <span class="menu-item-description">Three large breaded chicken strips served basket style</span>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -288,13 +464,33 @@
                         <i data-lucide="chevron-down" class="chevron-icon w-6 h-6 text-gray-600"></i>
                     </button>
                     <div id="burgers-list" class="collapsible-content mt-4">
-                        <p class="gf-note text-sm text-gray-500 mb-4 italic">gluten-free bun add 3</p>
+                        <p class="menu-note">Served basket style with choice of fries or tots.</p>
+                        <p class="gf-note text-sm text-gray-500 mb-4 italic">gluten-free options available</p>
                         <ul class="space-y-4">
-                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Scooter</span><span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span><span class="font-medium text-xl text-near-black-override">13<span class="price-cents">99</span></span></li>
-                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Downtowner</span><span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span><span class="font-medium text-xl text-near-black-override">13<span class="price-cents">99</span></span></li>
-                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Rook</span><span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span><span class="font-medium text-xl text-near-black-override">13<span class="price-cents">99</span></span></li>
-                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Hamburger</span><span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span><span class="font-medium text-xl text-near-black-override">11<span class="price-cents">99</span></span></li>
-                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Cheeseburger</span><span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span><span class="font-medium text-xl text-near-black-override">11<span class="price-cents">99</span></span></li>
+                            <li class="menu-item py-2">
+                                <div class="flex justify-between items-baseline">
+                                    <span class="text-xl font-semibold">SCOOTER</span>
+                                    <span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span>
+                                    <span class="font-medium text-xl text-near-black-override">13<span class="price-cents">75</span></span>
+                                </div>
+                                <span class="menu-item-description">A fresh 6oz Angus patty topped with lettuce, tomato, onions, on a toasted brioche bun (Add bacon for 1)</span>
+                            </li>
+                            <li class="menu-item py-2">
+                                <div class="flex justify-between items-baseline">
+                                    <span class="text-xl font-semibold">DOWNTOWNER</span>
+                                    <span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span>
+                                    <span class="font-medium text-xl text-near-black-override">14<span class="price-cents">75</span></span>
+                                </div>
+                                <span class="menu-item-description">A fresh 6oz Angus patty topped with melted american cheese, peanut butter, hot bacon jam toasted brioche bun</span>
+                            </li>
+                            <li class="menu-item py-2">
+                                <div class="flex justify-between items-baseline">
+                                    <span class="text-xl font-semibold">ROOK</span>
+                                    <span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span>
+                                    <span class="font-medium text-xl text-near-black-override">14<span class="price-cents">75</span></span>
+                                </div>
+                                <span class="menu-item-description">A fresh 6oz Angus patty topped with melted cheddar, thick cut bacon and smoky bbq sauce on a toasted brioche bun</span>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -304,13 +500,41 @@
                         <i data-lucide="chevron-down" class="chevron-icon w-6 h-6 text-gray-600"></i>
                     </button>
                     <div id="sandwiches-list" class="collapsible-content mt-4">
-                        <p class="gf-note text-sm text-gray-500 mb-4 italic">gluten-free bun/wrap add 3</p>
+                         <p class="menu-note">Served basket style with choice of fries or tots. Any chicken sandwich can be made as a wrap</p>
+                        <p class="gf-note text-sm text-gray-500 mb-4 italic">gluten-free options available</p>
                         <ul class="space-y-4">
-                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Birria Bluff Melt</span><span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span><span class="font-medium text-xl text-near-black-override">14<span class="price-cents">99</span></span></li>
-                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Eagle</span><span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span><span class="font-medium text-xl text-near-black-override">14<span class="price-cents">99</span></span></li>
-                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Siren</span><span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span><span class="font-medium text-xl text-near-black-override">14<span class="price-cents">99</span></span></li>
-                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Phoenix</span><span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span><span class="font-medium text-xl text-near-black-override">14<span class="price-cents">99</span></span></li>
-                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Classic Chicken Sandwich</span><span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span><span class="font-medium text-xl text-near-black-override">13<span class="price-cents">99</span></span></li>
+                             <li class="menu-item py-2">
+                                <div class="flex justify-between items-baseline">
+                                    <span class="text-xl font-semibold">BIRRIA BLUFF MELT</span>
+                                    <span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span>
+                                    <span class="font-medium text-xl text-near-black-override">15<span class="price-cents">75</span></span>
+                                </div>
+                                <span class="menu-item-description">Birria beef, cheddar, onions, and cilantro on a toasted thick sour dough</span>
+                            </li>
+                            <li class="menu-item py-2">
+                                <div class="flex justify-between items-baseline">
+                                    <span class="text-xl font-semibold">EAGLE</span>
+                                    <span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span>
+                                    <span class="font-medium text-xl text-near-black-override">14<span class="price-cents">75</span></span>
+                                </div>
+                                <span class="menu-item-description">Fried chicken breast topped with lettuce, tomato, pepper jack cheese, and hot honey on a toasted brioche bun</span>
+                            </li>
+                            <li class="menu-item py-2">
+                                <div class="flex justify-between items-baseline">
+                                    <span class="text-xl font-semibold">SIREN</span>
+                                    <span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span>
+                                    <span class="font-medium text-xl text-near-black-override">14<span class="price-cents">75</span></span>
+                                </div>
+                                <span class="menu-item-description">A grilled chicken breast with tomato, onions, and refreshing Tzaziki sauce on a grilled brioche bun</span>
+                            </li>
+                            <li class="menu-item py-2">
+                                <div class="flex justify-between items-baseline">
+                                    <span class="text-xl font-semibold">PHOENIX</span>
+                                    <span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span>
+                                    <span class="font-medium text-xl text-near-black-override">14<span class="price-cents">75</span></span>
+                                </div>
+                                <span class="menu-item-description">Fried chicken breast dusted in our signature Hell Dust seasoning! Served on a toasted brioche bun and topped with melted pepper jack, lettuce, tomatoes, pickles, and cajun mayo</span>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -321,7 +545,22 @@
                     </button>
                     <div id="wings-list" class="collapsible-content mt-4">
                         <ul class="space-y-4">
-                            <li class="flex justify-between items-baseline menu-item py-2"><span class="text-xl font-semibold">Wings</span><span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span><span class="font-medium text-xl text-near-black-override">12<span class="price-cents">99</span></span></li>
+                             <li class="menu-item py-2">
+                                <div class="flex justify-between items-baseline">
+                                    <span class="text-xl font-semibold">TRADITIONAL WINGS</span>
+                                    <span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span>
+                                    <span class="font-medium text-xl text-near-black-override">12<span class="price-cents">99</span></span>
+                                </div>
+                                <span class="menu-item-description">Seven JUMBO bone-in wings tossed in one of our seasonings or sauces</span>
+                            </li>
+                            <li class="menu-item py-2">
+                                <div class="flex justify-between items-baseline">
+                                    <span class="text-xl font-semibold">BONELESS WINGS</span>
+                                    <span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span>
+                                    <span class="font-medium text-xl text-near-black-override">12<span class="price-cents">99</span></span>
+                                </div>
+                                <span class="menu-item-description">Boneless wings served naked or toss in one of our seasonings or sauces</span>
+                            </li>
                         </ul>
                         <div class="sauce-list mt-4">
                             <strong>Sauces:</strong>
@@ -451,9 +690,8 @@
                     <div>
                          <h4 class="text-3xl font-semibold mb-4 text-near-white-override header-font">Hours</h4>
                          <ul class="space-y-2">
-                            <li><span class="font-semibold w-24 inline-block">Mon-Thu:</span> 11:00 AM - 11:00 PM</li>
-                            <li><span class="font-semibold w-24 inline-block">Fri-Sat:</span> 11:00 AM - 1:00 AM</li>
-                            <li><span class="font-semibold w-24 inline-block">Sun:</span> 12:00 PM - 10:00 PM</li>
+                            <li><span class="font-semibold w-24 inline-block">Mon-Tue:</span> Closed</li>
+                            <li><span class="font-semibold w-24 inline-block">Wed-Sun:</span> 11:00 AM - 12:00 AM</li>
                         </ul>
                     </div>
                 </div>
@@ -506,6 +744,17 @@
           // Find the sibling GF note if it exists (used for gluten-free notes)
           let potentialGfNote = trigger.nextElementSibling;
           let gfNote = null;
+           // Also find the sibling menu note
+          let potentialMenuNote = trigger.nextElementSibling;
+          let menuNote = null;
+
+          // Check for menu note first
+          if (potentialMenuNote && potentialMenuNote.classList.contains('menu-note')) {
+              menuNote = potentialMenuNote;
+              // If menu note exists, check the *next* sibling for gf note
+              potentialGfNote = menuNote.nextElementSibling;
+          }
+          // Check for gf note
           if (potentialGfNote && potentialGfNote.classList.contains('gf-note')) {
               gfNote = potentialGfNote;
           }
@@ -528,8 +777,15 @@
                     icon.classList.toggle('open');
                 }
 
-                // Special handling for gluten-free notes: show/hide them with the section
-                if (gfNote) {
+                // Special handling for notes: show/hide them with the section
+                if (menuNote) { // Handle menu note visibility
+                    if (!isOpen) { // If section is opening
+                        menuNote.classList.remove('hidden'); // Make sure note is visible
+                    } else { // If section is closing
+                        menuNote.classList.add('hidden'); // Hide the note
+                    }
+                }
+                if (gfNote) { // Handle GF note visibility
                     if (!isOpen) { // If section is opening
                         gfNote.classList.remove('hidden'); // Make sure note is visible
                     } else { // If section is closing
@@ -538,7 +794,10 @@
                 }
               });
 
-              // Initially hide GF notes if their section is collapsed
+              // Initially hide notes if their section is collapsed
+              if (menuNote && trigger.getAttribute('aria-expanded') === 'false') {
+                  menuNote.classList.add('hidden');
+              }
               if (gfNote && trigger.getAttribute('aria-expanded') === 'false') {
                   gfNote.classList.add('hidden');
               }
@@ -546,6 +805,143 @@
               console.warn(`Collapsible content not found for trigger controlling "${contentId}"`);
           }
         });
+
+        // --- Slideshow Functionality with Slider ---
+        const slideshowContainer = document.getElementById('slideshow-container');
+        const slider = document.getElementById('slideshow-slider');
+        const slideshowImages = [ // Replace with your actual image paths
+            'wp-content/images/interior-photos/Rookery-3.jpg',
+            'wp-content/images/interior-photos/Rookery-06.jpg',
+            'wp-content/images/interior-photos/Rookery-07.jpg',
+            'wp-content/images/interior-photos/Rookery-18.jpg',
+            'wp-content/images/interior-photos/Rookery-19.jpg'
+        ];
+        let currentSlideshowIndex = 0;
+        const slideshowInterval = 5000; // Time in milliseconds (5 seconds)
+        let slideshowTimer;
+        let imageElements = []; // To hold the dynamically created img elements
+        let isDraggingSlider = false; // Flag to track slider interaction
+
+        function setupSlideshow() {
+            if (!slideshowContainer || !slider) {
+                console.error("Slideshow container or slider not found.");
+                return;
+            }
+            slideshowContainer.innerHTML = ''; // Clear existing images if any
+            imageElements = []; // Reset the elements array
+
+            // Set slider properties
+            slider.max = slideshowImages.length - 1;
+            slider.value = currentSlideshowIndex;
+
+            // Create and add image elements to the container
+            slideshowImages.forEach((src, index) => {
+                const img = document.createElement('img');
+                img.src = src;
+                img.alt = `Interior view ${index + 1}`;
+                img.classList.add('slideshow-image');
+                img.dataset.index = index; // Store index if needed later
+                img.onerror = function() {
+                    // Fallback placeholder if an image fails to load
+                    this.onerror=null;
+                    this.src='https://placehold.co/800x600/111111/cccccc?text=Image+Load+Error';
+                };
+                slideshowContainer.appendChild(img);
+                imageElements.push(img);
+            });
+
+            // Add event listeners for slider interaction
+            slider.addEventListener('input', handleSliderInput);
+            slider.addEventListener('mousedown', pauseAutoRotate); // Pause on drag start
+            slider.addEventListener('touchstart', pauseAutoRotate, { passive: true }); // Use passive for touchstart
+            slider.addEventListener('mouseup', resumeAutoRotate); // Resume after drag end
+            slider.addEventListener('touchend', resumeAutoRotate); // Resume after touch end
+
+
+            rotateSlideshow(); // Set initial positions
+            startAutoRotate(); // Start automatic rotation
+        }
+
+        function rotateSlideshow(updateSlider = true) {
+            const numImages = imageElements.length;
+            if (numImages === 0) return;
+
+            if (numImages < 3) {
+                 imageElements.forEach((img, i) => {
+                    img.classList.remove('slideshow-pos-prev', 'slideshow-pos-next', 'slideshow-pos-out-left', 'slideshow-pos-main');
+                    if (i === currentSlideshowIndex) {
+                        img.classList.add('slideshow-pos-main');
+                    } else {
+                         img.classList.add('slideshow-pos-out-left');
+                    }
+                 });
+            } else {
+                imageElements.forEach((img, i) => {
+                    img.classList.remove('slideshow-pos-main', 'slideshow-pos-prev', 'slideshow-pos-next', 'slideshow-pos-out-left', 'slideshow-pos-out-right');
+                    let positionIndex = (i - currentSlideshowIndex + numImages) % numImages;
+
+                    if (positionIndex === 0) {
+                        img.classList.add('slideshow-pos-main');
+                    } else if (positionIndex === 1) {
+                        img.classList.add('slideshow-pos-next');
+                    } else if (positionIndex === numImages - 1) {
+                        img.classList.add('slideshow-pos-prev');
+                    } else {
+                        img.classList.add('slideshow-pos-out-left');
+                    }
+                });
+            }
+
+            // Update slider value to match current image, unless slider is being dragged
+            if (slider && updateSlider) {
+                slider.value = currentSlideshowIndex;
+            }
+        }
+
+        function nextSlide() {
+            currentSlideshowIndex = (currentSlideshowIndex + 1) % imageElements.length;
+            rotateSlideshow();
+        }
+
+        function startAutoRotate() {
+            clearInterval(slideshowTimer); // Clear existing timer
+            if (!isDraggingSlider) { // Only start if not currently dragging
+                 slideshowTimer = setInterval(nextSlide, slideshowInterval);
+            }
+        }
+
+        function pauseAutoRotate() {
+            isDraggingSlider = true; // Set flag when user starts interacting
+            clearInterval(slideshowTimer);
+        }
+
+        function resumeAutoRotate() {
+            isDraggingSlider = false; // Reset flag when user stops interacting
+            // Restart timer after a short delay
+            setTimeout(startAutoRotate, 500); // Give time for 'input' event to potentially fire
+        }
+
+        function handleSliderInput() {
+            // This function is called continuously during drag
+            const newIndex = parseInt(slider.value, 10);
+            if (newIndex !== currentSlideshowIndex) {
+                currentSlideshowIndex = newIndex;
+                // Call rotateSlideshow but tell it NOT to update the slider value again
+                // This prevents the slider from jumping during drag
+                rotateSlideshow(false);
+            }
+        }
+
+
+        // Initialize the slideshow
+        if (slideshowImages.length > 0) {
+             setupSlideshow();
+        } else {
+            console.warn("No images provided for the slideshow.");
+             if(slideshowContainer) slideshowContainer.innerHTML = '<p class="text-gray-500">No images available for slideshow.</p>'; // Optional message
+             if(slider) slider.style.display = 'none'; // Hide slider if no images
+        }
+
       }); // End of DOMContentLoaded listener
     </script>
     </body>
