@@ -313,6 +313,17 @@
             border: 1px solid var(--near-black);
         }
 
+        /* Footer contact link styling */
+        .footer-contact a {
+             color: var(--rookery-gold);
+             text-decoration: none;
+             transition: color 0.2s ease-in-out;
+        }
+         .footer-contact a:hover {
+             color: #facc15; /* Tailwind yellow-300 */
+             text-decoration: underline;
+         }
+
 
     </style>
 </head>
@@ -713,6 +724,11 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-facebook"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
                 </a>
             </div>
+             <div class="text-sm mb-4 footer-contact">
+                 <a href="tel:608-519-0335" class="hover:underline">608-519-0335</a>
+                 <span class="mx-2 text-gray-600">|</span>
+                 <a href="mailto:therookerylax@gmail.com" class="hover:underline">therookerylax@gmail.com</a>
+             </div>
             <p class="text-sm mb-2">Veteran Owned and Operated</p>
             <p class="text-sm">© <script>document.write(new Date().getFullYear())</script> The Rookery. All Rights Reserved.</p>
              </div>
@@ -822,8 +838,17 @@
         function setupSlideshow() {
             if (!slideshowContainer || !slider) {
                 console.error("Slideshow container or slider not found.");
+                // Hide slider if container or images are missing
+                if(slider) slider.style.display = 'none';
                 return;
             }
+             if (slideshowImages.length === 0) {
+                 console.warn("No images provided for the slideshow.");
+                 slideshowContainer.innerHTML = '<p class="text-gray-500">No images available for slideshow.</p>';
+                 slider.style.display = 'none'; // Hide slider if no images
+                 return;
+             }
+
             slideshowContainer.innerHTML = ''; // Clear existing images if any
             imageElements = []; // Reset the elements array
 
@@ -931,13 +956,7 @@
 
 
         // Initialize the slideshow
-        if (slideshowImages.length > 0) {
-             setupSlideshow();
-        } else {
-            console.warn("No images provided for the slideshow.");
-             if(slideshowContainer) slideshowContainer.innerHTML = '<p class="text-gray-500">No images available for slideshow.</p>'; // Optional message
-             if(slider) slider.style.display = 'none'; // Hide slider if no images
-        }
+        setupSlideshow(); // Call setup unconditionally
 
       }); // End of DOMContentLoaded listener
     </script>
