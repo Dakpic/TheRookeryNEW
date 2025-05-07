@@ -476,7 +476,6 @@
                     </button>
                     <div id="burgers-list" class="collapsible-content mt-4">
                         <p class="menu-note">Served basket style with choice of fries or tots.</p>
-                        <p class="gf-note text-sm text-gray-500 mb-4 italic">gluten-free options available</p>
                         <ul class="space-y-4">
                             <li class="menu-item py-2">
                                 <div class="flex justify-between items-baseline">
@@ -512,8 +511,7 @@
                     </button>
                     <div id="sandwiches-list" class="collapsible-content mt-4">
                          <p class="menu-note">Served basket style with choice of fries or tots. Any chicken sandwich can be made as a wrap</p>
-                        <p class="gf-note text-sm text-gray-500 mb-4 italic">gluten-free options available</p>
-                        <ul class="space-y-4">
+                         <ul class="space-y-4">
                              <li class="menu-item py-2">
                                 <div class="flex justify-between items-baseline">
                                     <span class="text-xl font-semibold">BIRRIA BLUFF MELT</span>
@@ -560,7 +558,7 @@
                                 <div class="flex justify-between items-baseline">
                                     <span class="text-xl font-semibold">TRADITIONAL WINGS</span>
                                     <span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span>
-                                    <span class="font-medium text-xl text-near-black-override">12<span class="price-cents">99</span></span>
+                                    <span class="font-medium text-xl text-near-black-override">12<span class="price-cents">75</span></span>
                                 </div>
                                 <span class="menu-item-description">Seven JUMBO bone-in wings tossed in one of our seasonings or sauces</span>
                             </li>
@@ -568,7 +566,7 @@
                                 <div class="flex justify-between items-baseline">
                                     <span class="text-xl font-semibold">BONELESS WINGS</span>
                                     <span class="ml-2 border-b border-dotted border-gray-400 flex-grow mx-3"></span>
-                                    <span class="font-medium text-xl text-near-black-override">12<span class="price-cents">99</span></span>
+                                     <span class="font-medium text-xl text-near-black-override">12<span class="price-cents">75</span></span>
                                 </div>
                                 <span class="menu-item-description">Boneless wings served naked or toss in one of our seasonings or sauces</span>
                             </li>
@@ -757,22 +755,11 @@
           const contentId = trigger.getAttribute('aria-controls');
           const content = document.getElementById(contentId);
 
-          // Find the sibling GF note if it exists (used for gluten-free notes)
-          let potentialGfNote = trigger.nextElementSibling;
-          let gfNote = null;
-           // Also find the sibling menu note
+          // Find the sibling menu note if it exists
           let potentialMenuNote = trigger.nextElementSibling;
           let menuNote = null;
-
-          // Check for menu note first
           if (potentialMenuNote && potentialMenuNote.classList.contains('menu-note')) {
               menuNote = potentialMenuNote;
-              // If menu note exists, check the *next* sibling for gf note
-              potentialGfNote = menuNote.nextElementSibling;
-          }
-          // Check for gf note
-          if (potentialGfNote && potentialGfNote.classList.contains('gf-note')) {
-              gfNote = potentialGfNote;
           }
 
 
@@ -793,7 +780,7 @@
                     icon.classList.toggle('open');
                 }
 
-                // Special handling for notes: show/hide them with the section
+                // Special handling for menu notes: show/hide them with the section
                 if (menuNote) { // Handle menu note visibility
                     if (!isOpen) { // If section is opening
                         menuNote.classList.remove('hidden'); // Make sure note is visible
@@ -801,22 +788,14 @@
                         menuNote.classList.add('hidden'); // Hide the note
                     }
                 }
-                if (gfNote) { // Handle GF note visibility
-                    if (!isOpen) { // If section is opening
-                        gfNote.classList.remove('hidden'); // Make sure note is visible
-                    } else { // If section is closing
-                        gfNote.classList.add('hidden'); // Hide the note
-                    }
-                }
+                // Removed GF Note handling
               });
 
               // Initially hide notes if their section is collapsed
               if (menuNote && trigger.getAttribute('aria-expanded') === 'false') {
                   menuNote.classList.add('hidden');
               }
-              if (gfNote && trigger.getAttribute('aria-expanded') === 'false') {
-                  gfNote.classList.add('hidden');
-              }
+              // Removed GF Note initial hide
           } else {
               console.warn(`Collapsible content not found for trigger controlling "${contentId}"`);
           }
